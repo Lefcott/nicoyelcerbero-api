@@ -1,0 +1,201 @@
+{
+  "body": {
+    "additional_info": "",
+    "auto_return": "",
+    "back_urls": {
+      "failure": "",
+      "pending": "",
+      "success": ""
+    },
+    "binary_mode": false,
+    "client_id": "8584945589478106",
+    "collector_id": 487629006,
+    "coupon_code": null,
+    "coupon_labels": null,
+    "date_created": "2023-01-27T16:56:53.326-04:00",
+    "date_of_expiration": null,
+    "expiration_date_from": null,
+    "expiration_date_to": null,
+    "expires": false,
+    "external_reference": "",
+    "id": "487629006-f22378d1-bb62-4db2-8a7f-15574ff1d8d2",
+    "init_point": "https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=487629006-f22378d1-bb62-4db2-8a7f-15574ff1d8d2",
+    "internal_metadata": null,
+    "items": [
+      {
+        "id": "",
+        "category_id": "",
+        "currency_id": "ARS",
+        "description": "",
+        "title": "Entradas para [object Object], [object Object]",
+        "quantity": 1,
+        "unit_price": 10.5
+      }
+    ],
+    "marketplace": "NONE",
+    "marketplace_fee": 0,
+    "metadata": {},
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "payer": {
+      "phone": {
+        "area_code": "",
+        "number": ""
+      },
+      "address": {
+        "zip_code": "",
+        "street_name": "",
+        "street_number": null
+      },
+      "email": "",
+      "identification": {
+        "number": "",
+        "type": ""
+      },
+      "name": "",
+      "surname": "",
+      "date_created": null,
+      "last_purchase": null
+    },
+    "payment_methods": {
+      "default_card_id": null,
+      "default_payment_method_id": null,
+      "excluded_payment_methods": [
+        {
+          "id": ""
+        }
+      ],
+      "excluded_payment_types": [
+        {
+          "id": ""
+        }
+      ],
+      "installments": null,
+      "default_installments": null
+    },
+    "processing_modes": null,
+    "product_id": null,
+    "redirect_urls": {
+      "failure": "",
+      "pending": "",
+      "success": ""
+    },
+    "sandbox_init_point": "https://sandbox.mercadopago.com.ar/checkout/v1/redirect?pref_id=487629006-f22378d1-bb62-4db2-8a7f-15574ff1d8d2",
+    "site_id": "MLA",
+    "shipments": {
+      "default_shipping_method": null,
+      "receiver_address": {
+        "zip_code": "",
+        "street_name": "",
+        "street_number": null,
+        "floor": "",
+        "apartment": "",
+        "city_name": null,
+        "state_name": null,
+        "country_name": null
+      }
+    },
+    "total_amount": null,
+    "last_updated": null
+  },
+  "response": {
+    "additional_info": "",
+    "auto_return": "",
+    "back_urls": {
+      "failure": "",
+      "pending": "",
+      "success": ""
+    },
+    "binary_mode": false,
+    "client_id": "8584945589478106",
+    "collector_id": 487629006,
+    "coupon_code": null,
+    "coupon_labels": null,
+    "date_created": "2023-01-27T16:56:53.326-04:00",
+    "date_of_expiration": null,
+    "expiration_date_from": null,
+    "expiration_date_to": null,
+    "expires": false,
+    "external_reference": "",
+    "id": "487629006-f22378d1-bb62-4db2-8a7f-15574ff1d8d2",
+    "init_point": "https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=487629006-f22378d1-bb62-4db2-8a7f-15574ff1d8d2",
+    "internal_metadata": null,
+    "items": [
+      {
+        "id": "",
+        "category_id": "",
+        "currency_id": "ARS",
+        "description": "",
+        "title": "Entradas para [object Object], [object Object]",
+        "quantity": 1,
+        "unit_price": 10.5
+      }
+    ],
+    "marketplace": "NONE",
+    "marketplace_fee": 0,
+    "metadata": {},
+    "notification_url": null,
+    "operation_type": "regular_payment",
+    "payer": {
+      "phone": {
+        "area_code": "",
+        "number": ""
+      },
+      "address": {
+        "zip_code": "",
+        "street_name": "",
+        "street_number": null
+      },
+      "email": "",
+      "identification": {
+        "number": "",
+        "type": ""
+      },
+      "name": "",
+      "surname": "",
+      "date_created": null,
+      "last_purchase": null
+    },
+    "payment_methods": {
+      "default_card_id": null,
+      "default_payment_method_id": null,
+      "excluded_payment_methods": [
+        {
+          "id": ""
+        }
+      ],
+      "excluded_payment_types": [
+        {
+          "id": ""
+        }
+      ],
+      "installments": null,
+      "default_installments": null
+    },
+    "processing_modes": null,
+    "product_id": null,
+    "redirect_urls": {
+      "failure": "",
+      "pending": "",
+      "success": ""
+    },
+    "sandbox_init_point": "https://sandbox.mercadopago.com.ar/checkout/v1/redirect?pref_id=487629006-f22378d1-bb62-4db2-8a7f-15574ff1d8d2",
+    "site_id": "MLA",
+    "shipments": {
+      "default_shipping_method": null,
+      "receiver_address": {
+        "zip_code": "",
+        "street_name": "",
+        "street_number": null,
+        "floor": "",
+        "apartment": "",
+        "city_name": null,
+        "state_name": null,
+        "country_name": null
+      }
+    },
+    "total_amount": null,
+    "last_updated": null
+  },
+  "status": 201
+}
