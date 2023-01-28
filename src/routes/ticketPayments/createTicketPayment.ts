@@ -12,8 +12,8 @@ const router = express.Router();
 
 router.post(
   "/",
-  body("showKey").isString(),
-  body("payerEmail").isString(),
+  body("showKey").isString().notEmpty(),
+  body("payerEmail").isString().notEmpty(),
   body("guests").isArray({ min: 1, max: 10 }),
   check("guests.*.firstName").not().isEmpty(),
   check("guests.*.lastName").not().isEmpty(),
