@@ -1,6 +1,7 @@
 import { Document, Types } from "mongoose";
 import Show from "../models/show";
 import { TicketPaymentInterface } from "../models/ticketPayment";
+import { sendEmail } from "./sendEmail";
 
 export const addGuestsToShow = async (
   ticketPayment: Document<unknown, any, TicketPaymentInterface> &
@@ -12,4 +13,5 @@ export const addGuestsToShow = async (
     { key: ticketPayment.showKey },
     { $push: { guests: { $each: ticketPayment.guests } } }
   );
+  sendEmail("ticketConfirmation", ticketPayment.payerEmail);
 };
