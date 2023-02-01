@@ -6,7 +6,10 @@ import { addGuestsToShow } from "../utils/addGuestsToShow";
 import { PaymentGetResponse } from "mercadopago/resources/payment";
 
 export const run = async () => {
-  const ticketPayments = await TicketPayment.find({ status: "pending" });
+  const ticketPayments = await TicketPayment.find({
+    status: "pending",
+    paymentExternalId: { $exists: true },
+  });
   console.log("checking payments", ticketPayments);
 
   for (let i = 0; i < ticketPayments.length; i += 1) {
