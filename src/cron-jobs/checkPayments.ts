@@ -4,8 +4,9 @@ import { wait } from "../utils/wait";
 import mercadopago from "../utils/mercadopago";
 import { addGuestsToShow } from "../utils/addGuestsToShow";
 
-const run = async () => {
+export const run = async () => {
   const ticketPayments = await TicketPayment.find({ status: "pending" });
+  console.log("checking payments", ticketPayments);
 
   for (let i = 0; i < ticketPayments.length; i += 1) {
     const ticketPayment = ticketPayments[i];
@@ -22,7 +23,4 @@ const run = async () => {
     }
     await wait(500);
   }
-  process.exit(0);
 };
-
-run();
