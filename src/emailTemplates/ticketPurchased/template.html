@@ -62,7 +62,8 @@
   </header>
   <main>
     <p>
-      {{ payerEmail }} compró {{ guests.length }} entrada{{ #guests.1 }}s{{ /guests.1 }} para el show del {{ show.date }}.
+      {{ payerEmail }} compró {{ guests.length }} entrada{{ #guests.1 }}s{{ /guests.1 }} para el show del {{ show.date
+      }}.
     </p>
     <p>Los nuevos invitados son:</p>
     <ul>
@@ -70,7 +71,7 @@
       <li>{{ firstName }} {{ lastName }}</li>
       {{ /guests }}
     </ul>
-    <p>Esta es la lista completa de invitados hasta el momento:</p>
+    <p>Esta es la lista completa de invitados hasta el momento ({{ show.guests.length }} personas):</p>
     <ul>
       {{ #show.guests }}
       <li>{{ firstName }} {{ lastName }}</li>
