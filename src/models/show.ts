@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { GuestInterface } from "./ticketPayment";
 
 interface ShowInterface {
   key: string;
@@ -13,6 +14,7 @@ interface ShowInterface {
   address: string;
   addressUrl: string;
   onlyAdults: boolean;
+  guests: GuestInterface[];
 }
 
 const showSchema = new Schema<ShowInterface>({
@@ -28,8 +30,14 @@ const showSchema = new Schema<ShowInterface>({
   address: { type: String, required: true },
   addressUrl: { type: String, required: true },
   onlyAdults: { type: Boolean, required: true },
+  guests: [
+    {
+      firstName: { type: String, required: true },
+      lastName: { type: String, required: true },
+    },
+  ],
 });
 
-const Show = mongoose.model("Show", showSchema);
+const Show = mongoose.model("Show", showSchema, "shows");
 
 export default Show;

@@ -1,12 +1,10 @@
 import express from "express";
 import { check, body, validationResult } from "express-validator";
-import mercadopago from "mercadopago";
+import { v4 as uuid } from "uuid";
+import mercadopago from "../../utils/mercadopago";
 import Show from "../../models/show";
 import TicketPayment from "../../models/ticketPayment";
-
-mercadopago.configure({
-  access_token: process.env.MERCADO_PAGO_ACCESS_TOKEN || "",
-});
+import { formatUserName } from "../../utils/formatUsername";
 
 const router = express.Router();
 
@@ -24,20 +22,27 @@ router.post(
     }
 
     try {
-      const { showKey, payerEmail, guests } = req.body;
+      const { showKey, payerEmail } = req.body;
+      const guests = req.body.guests.map((guest) => ({
+        firstName: formatUserName(guest.firstName, guest.lastName).firstName,
+        lastName: formatUserName(guest.firstName, guest.lastName).lastName,
+      }));
       const show = await Show.findOne({ key: showKey });
 
       if (!show) {
         return res.status(404).json({ error: "show not found" });
       }
 
+      const paymentExternalId = uuid();
       const preference = await mercadopago.preferences.create({
         items: [
           {
-            title: `Entradas para ${guests
-              .map((guest) => `${guest.firstName} ${guest.lastName}`)
-              .join(", ")}`,
+            title: `Entrada${guests.length > 1 ? "s" : ""} para ${guests.join(
+              ", "
+            )}`,
+            id: paymentExternalId,
             quantity: 1,
+            picture_url: show.flyerUrl,
             currency_id: "ARS",
             unit_price: (show.presalePrice || 0) * guests.length,
           },
@@ -45,10 +50,11 @@ router.post(
       });
 
       const ticketPayment = new TicketPayment({
+        paymentExternalId,
+        status: "pending",
         showKey,
         payerEmail,
         guests,
-        preferenceId: preference.body.id,
       });
 
       await ticketPayment.save();
