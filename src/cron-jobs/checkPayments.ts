@@ -5,11 +5,7 @@ import mercadopago from "../utils/mercadopago";
 import { addGuestsToShow } from "../utils/addGuestsToShow";
 
 const run = async () => {
-  const ticketPayments = await TicketPayment.find({
-    status: { $ne: "approved" },
-  });
-
-  console.log("ticketPayments", ticketPayments);
+  const ticketPayments = await TicketPayment.find({ status: "pending" });
 
   for (let i = 0; i < ticketPayments.length; i += 1) {
     const ticketPayment = ticketPayments[i];
@@ -21,11 +17,8 @@ const run = async () => {
       ticketPayment.status = payment.body.status;
       await ticketPayment.save();
     }
-    console.log("payment.body.status", payment.body.status);
     if (payment.body.status === "approved") {
-      console.log("adding guests");
       await addGuestsToShow(ticketPayment);
-      console.log("added");
     }
     await wait(500);
   }
