@@ -33,14 +33,14 @@ router.post(
         return res.status(404).json({ error: "show not found" });
       }
 
-      const paymentExternalId = uuid();
+      const paymentInternalId = uuid();
       const preference = await mercadopago.preferences.create({
         items: [
           {
             title: `Entrada${guests.length > 1 ? "s" : ""} para ${guests.join(
               ", "
             )}`,
-            id: paymentExternalId,
+            id: paymentInternalId,
             quantity: 1,
             picture_url: show.flyerUrl,
             currency_id: "ARS",
@@ -50,7 +50,7 @@ router.post(
       });
 
       const ticketPayment = new TicketPayment({
-        paymentExternalId,
+        paymentInternalId,
         status: "pending",
         showKey,
         payerEmail,

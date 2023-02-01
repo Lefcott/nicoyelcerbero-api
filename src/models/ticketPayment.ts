@@ -6,6 +6,7 @@ export interface GuestInterface {
 }
 
 export interface TicketPaymentInterface {
+  paymentInternalId: string;
   paymentExternalId: string;
   showKey: string;
   payerEmail: string;
@@ -14,7 +15,8 @@ export interface TicketPaymentInterface {
 }
 
 const ticketPaymentSchema = new Schema<TicketPaymentInterface>({
-  paymentExternalId: { type: String, required: true },
+  paymentInternalId: { type: String, required: true },
+  paymentExternalId: String,
   showKey: { type: String, required: true },
   payerEmail: { type: String, required: true },
   status: { type: String, required: true },

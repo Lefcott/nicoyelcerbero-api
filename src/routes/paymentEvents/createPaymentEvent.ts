@@ -9,20 +9,21 @@ const router = express.Router();
 router.post("/", async (req, res, next) => {
   try {
     console.log("payment event received from mercadopago", req.body);
+    const { id: paymentExternalId } = req.body.data;
     const payment = await mercadopago.payment.get(req.body.data.id);
-    const [{ id: paymentExternalId }] = payment.body.additional_info.items;
+    const [{ id: paymentInternalId }] = payment.body.additional_info.items;
     const { status } = payment.body;
 
     res.json({ message: "OK" });
 
     const ticketPayment = await TicketPayment.findOneAndUpdate(
-      { paymentExternalId },
-      { status }
+      { paymentInternalId },
+      { paymentExternalId, status }
     );
 
     if (!ticketPayment) {
       console.error(
-        `ticket payment with external id ${paymentExternalId} not found`
+        `ticket payment with internal id ${paymentInternalId} not found`
       );
       return;
     }

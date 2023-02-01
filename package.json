@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon",
-    "build": "rimraf ./build && tsc",
-    "start": "node build/index.js"
+    "build": "rimraf ./build && tsc && npm run copy-files",
+    "start": "node build/index.js",
+    "check-payments": "node build/cron-jobs/checkPayments.js",
+    "copy-files": "cp -R \"./src/emailTemplates\" ./build"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,7 @@
     "@types/mustache": "^4.2.2",
     "@types/node": "^18.11.18",
     "@types/nodemailer": "^6.4.7",
+    "copyfiles": "^2.4.1",
     "dotenv": "^16.0.3",
     "localtunnel": "^2.0.2",
     "nodemon": "^2.0.20",
