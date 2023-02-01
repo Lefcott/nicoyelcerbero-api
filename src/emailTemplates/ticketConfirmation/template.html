@@ -56,15 +56,38 @@
     <h1>Show de Nico y El Cerbero</h1>
   </header>
   <main>
-    <p>Te informamos que acabas de comprar tus entradas para el concierto que se llevará a cabo el {{ show.date }} en {{
+    <p>
+      {{ #guests.1 }}
+      Te
+      {{ /guests.1 }}
+      {{ ^guests.1 }}
+      {{ guests.0.firstName }}, te
+      {{ /guests.1 }}
+      informamos que acabas de comprar
+      {{ #guests.1 }}
+      tus entradas
+      {{ /guests.1 }}
+      {{ ^guests.1 }}
+      tu entrada
+      {{ /guests.1 }}
+      para el concierto que se llevará a cabo el {{ show.date }} en {{
       show.locationName }} (<a href="{{ show.addressUrl }}">{{ show.address }}</a>).</p>
+
+    {{ #guests.1 }}
     <p>Anotamos a las siguientes personas en la lista de invitados:</p>
     <ul>
-      {{ #show.guests }}
+      {{ #guests }}
       <li>{{ firstName }} {{ lastName }}</li>
-      {{ /show.guests }}
+      {{ /guests }}
     </ul>
-    <p>Para acceder al evento, solo tendrás que decir tu nombre y apellido en la entrada.</p>
+    <p>Para acceder al evento, las personas en la lista solo tendrán que decir su nombre y apellido en la entrada.</p>
+    {{ /guests.1 }}
+    {{ ^guests.1 }}
+    <p>
+      Te anotamos en la lista de invitados. Para acceder al evento, solo tendrás que decir tu nombre y apellido en la
+      entrada.
+    </p>
+    {{ /guests.1 }}
     <p>No te pierdas la oportunidad de disfrutar de una noche inolvidable con amigos y familiares.</p>
   </main>
   <footer>
