@@ -20,7 +20,7 @@ router.head(
         throw new Error(`Cron job with name ${cronJobName} not found`);
       }
 
-      job.run();
+      await job.run();
 
       res.json({ message: "ok" });
     } catch (error: any) {
