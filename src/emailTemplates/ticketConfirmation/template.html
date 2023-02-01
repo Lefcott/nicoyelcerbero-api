@@ -1,70 +1,75 @@
+<!DOCTYPE html>
 <html>
 
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* Add your custom styles here */
+    /* Reset */
+    html,
     body {
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
+    }
+
+    /* Header */
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header img {
+      max-width: 150px;
+      height: auto;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 36px;
+      font-weight: normal;
+    }
+
+    /* Main Content */
+    main {
+      padding: 20px;
       background-color: #f2f2f2;
     }
 
-    .header {
-      background-color: #ffffff;
-      padding: 20px;
+    /* Footer */
+    footer {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
       text-align: center;
-    }
-
-    .header h1 {
-      color: #333333;
-      font-size: 36px;
-      margin: 0;
-    }
-
-    .content {
-      background-color: #ffffff;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .content p {
-      color: #666666;
-      font-size: 18px;
-      margin: 0;
-    }
-
-    .cta {
-      background-color: #1b95e0;
-      color: #ffffff;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .cta a {
-      color: #ffffff;
-      font-size: 18px;
-      text-decoration: none;
     }
   </style>
 </head>
 
 <body>
-  <div class="header">
-    <img src="http://localhost:3000/logo.png" alt="Logo">
+  <header>
+    <img src="logo.png" alt="Concert Logo">
     <h1>Show de Nico y El Cerbero</h1>
-  </div>
-  <div class="content">
-    <p>Gracias por comprar entradas para vernos en vivo!</p>
-    <h4>Las siguientes personas están anotadas en la lista de invitados:</h4>
+  </header>
+  <main>
+    <p>Te informamos que acabas de comprar tus entradas para el concierto que se llevará a cabo el {{ show.date }} en {{
+      show.locationName }} (<a href="{{ show.addressUrl }}">{{ show.address }}</a>).</p>
+    <p>Anotamos a las siguientes personas en la lista de invitados:</p>
     <ul>
-      <li>Juan Pérez</li>
-      <li>María Rodríguez</li>
-      <li>Pedro González</li>
+      {{ #show.guests }}
+      <li>{{ firstName }} {{ lastName }}</li>
+      {{ /show.guests }}
     </ul>
-    <p>Para disfrutar del espectáculo, solo tenés que decir tu nombre y apellido en la entrada.</p>
-  </div>
-  <div class="cta">
-    <p>Nos vemos pronto en el concierto!</p>
-  </div>
+    <p>Para acceder al evento, solo tendrás que decir tu nombre y apellido en la entrada.</p>
+    <p>No te pierdas la oportunidad de disfrutar de una noche inolvidable con amigos y familiares.</p>
+  </main>
+  <footer>
+    <p>¡Gracias por elegirnos!</p>
+  </footer>
 </body>
 
 </html>

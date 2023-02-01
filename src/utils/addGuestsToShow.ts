@@ -13,5 +13,9 @@ export const addGuestsToShow = async (
     { key: ticketPayment.showKey },
     { $push: { guests: { $each: ticketPayment.guests } } }
   );
-  sendEmail("ticketConfirmation", ticketPayment.payerEmail);
+  const show = await Show.findOne({ key: ticketPayment.showKey });
+  sendEmail("ticketConfirmation", ticketPayment.payerEmail, {
+    guests: ticketPayment.guests,
+    show,
+  });
 };

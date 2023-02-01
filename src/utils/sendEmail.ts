@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import fs from "fs";
 import Mail from "nodemailer/lib/mailer";
 import path from "path";
+import mustache from "mustache";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -11,7 +12,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendEmail = (templateName, to) => {
+export const sendEmail = (templateName: string, to: string, data) => {
   const template = fs
     .readFileSync(
       path.join(__dirname, `../emailTemplates/${templateName}/template.html`)
@@ -29,7 +30,7 @@ export const sendEmail = (templateName, to) => {
     from: process.env.SENDER_EMAIL,
     to,
     subject,
-    html: template,
+    html: mustache.render(template, data),
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
