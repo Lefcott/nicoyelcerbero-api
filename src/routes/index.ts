@@ -19,4 +19,4 @@ app.use((error, req, res, next) => {
   res.status(500).json({ error });
 });
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 3001);
