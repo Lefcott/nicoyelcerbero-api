@@ -3,6 +3,8 @@ import Show from "../models/show";
 import { TicketPaymentInterface } from "../models/ticketPayment";
 import { sendEmail } from "./sendEmail";
 
+const notificationEmails = (process.env.NOTIFICATION_EMAILS || "").split(",");
+
 export const addGuestsToShow = async (
   ticketPayment: Document<unknown, any, TicketPaymentInterface> &
     TicketPaymentInterface & {
@@ -14,8 +16,18 @@ export const addGuestsToShow = async (
     { $push: { guests: { $each: ticketPayment.guests } } }
   );
   const show = await Show.findOne({ key: ticketPayment.showKey });
+
   await sendEmail("ticketConfirmation", ticketPayment.payerEmail, {
     guests: ticketPayment.guests,
+    show,
+  });
+
+  await sendEmail("ticketPurchased", notificationEmails, {
+    guests: ticketPayment.guests,
+    payerEmail: ticketPayment.payerEmail,
+    guestNames: ticketPayment.guests
+      .map((guest) => `${guest.firstName} ${guest.lastName}`)
+      .join(", "),
     show,
   });
 };

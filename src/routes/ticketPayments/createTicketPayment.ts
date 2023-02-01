@@ -37,9 +37,12 @@ router.post(
       const preference = await mercadopago.preferences.create({
         items: [
           {
-            title: `Entrada${guests.length > 1 ? "s" : ""} para ${guests.join(
-              ", "
-            )}`,
+            title: `Entrada${guests.length > 1 ? "s" : ""} para ${guests
+              .map(
+                (guest) =>
+                  formatUserName(guest.firstName, guest.lastName).completeName
+              )
+              .join(", ")}`,
             id: paymentInternalId,
             quantity: 1,
             picture_url: show.flyerUrl,

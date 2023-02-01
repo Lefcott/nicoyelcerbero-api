@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendEmail = (templateName: string, to: string, data) =>
+export const sendEmail = (templateName: string, to: string | string[], data) =>
   new Promise((resolve) => {
     const template = fs
       .readFileSync(
