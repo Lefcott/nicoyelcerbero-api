@@ -5,7 +5,7 @@ import cronJobs from "../../cron-jobs";
 
 const router = express.Router();
 
-router.head(
+router.get(
   "/:cronJobName/executions",
   query("cronToken")
     .isString()
