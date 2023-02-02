@@ -5,6 +5,7 @@ import mercadopago from "../../utils/mercadopago";
 import Show from "../../models/show";
 import TicketPayment from "../../models/ticketPayment";
 import { formatUserName } from "../../utils/formatUsername";
+import { getPrice } from "../../utils/getPrice";
 
 const router = express.Router();
 
@@ -34,6 +35,8 @@ router.post(
       }
 
       const paymentInternalId = uuid();
+      let price = getPrice(show, guests);
+
       const preference = await mercadopago.preferences.create({
         items: [
           {
@@ -47,7 +50,7 @@ router.post(
             quantity: 1,
             picture_url: show.flyerUrl,
             currency_id: "ARS",
-            unit_price: (show.presalePrice || 0) * guests.length,
+            unit_price: price,
           },
         ],
       });

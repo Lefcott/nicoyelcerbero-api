@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import { GuestInterface } from "./ticketPayment";
 
-interface ShowInterface {
+export interface ShowInterface {
   key: string;
   active: boolean;
   flyerUrl: string;
@@ -15,6 +15,7 @@ interface ShowInterface {
   addressUrl: string;
   onlyAdults: boolean;
   guests: GuestInterface[];
+  feePayer: "buyer" | "seller" | "both";
 }
 
 const showSchema = new Schema<ShowInterface>({
@@ -36,6 +37,7 @@ const showSchema = new Schema<ShowInterface>({
       lastName: { type: String, required: true },
     },
   ],
+  feePayer: { type: String, required: true },
 });
 
 const Show = mongoose.model("Show", showSchema, "shows");

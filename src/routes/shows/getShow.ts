@@ -16,7 +16,10 @@ router.get("/:showKey", async (req, res) => {
     return res.status(404).json({ error: "show not found" });
   }
 
-  res.json({ ...show.toJSON(), fee: 0.0639 });
+  res.json({
+    ...show.toJSON(),
+    feeMultiplier: +(process.env.PAYMENT_FEE_MULTIPLIER || ""),
+  });
 });
 
 export default router;
