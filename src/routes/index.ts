@@ -1,17 +1,8 @@
-import express from "express";
-import cors from "cors";
-
 import ticketPaymentRoutes from "./ticketPayments";
 import payentEvents from "./paymentEvents";
 import showRoutes from "./shows";
 import cronJobRoutes from "./cron-jobs";
-import requestLoggerMiddleware from "./middlewares/log";
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-app.use(requestLoggerMiddleware);
+import app from "./middlewares";
 
 app.use(ticketPaymentRoutes);
 app.use(payentEvents);
