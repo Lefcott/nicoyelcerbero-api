@@ -1,3 +1,4 @@
+import axios from "axios";
 import mongoose, { Schema } from "mongoose";
 import { GuestInterface } from "./ticketPayment";
 
@@ -41,5 +42,32 @@ const showSchema = new Schema<ShowInterface>({
 });
 
 const Show = mongoose.model("Show", showSchema, "shows");
+
+Show.watch().on("change", async (data) => {
+  // @ts-ignore
+  const showId = data.documentKey._id;
+  const show = await Show.findById(showId);
+
+  if (!show) {
+    console.error(`changed show with id ${showId} not found`);
+    return;
+  }
+
+  const paths = ["/", `/${show.key}`];
+  console.log("revalidating", paths);
+
+  axios
+    .post(
+      `${process.env.WEB_URL}/api/revalidate`,
+      { paths: [] },
+      { params: { token: process.env.REVALIDATION_TOKEN } }
+    )
+    .then(() => {
+      console.log("cache was revalidated");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
 
 export default Show;
