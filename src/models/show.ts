@@ -59,7 +59,7 @@ Show.watch().on("change", async (data) => {
   axios
     .post(
       `${process.env.WEB_URL}/api/revalidate`,
-      { paths: [] },
+      { paths },
       { params: { token: process.env.REVALIDATION_TOKEN } }
     )
     .then(() => {
