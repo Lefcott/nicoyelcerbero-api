@@ -16,7 +16,7 @@ router.get("/:showKey", async (req, res) => {
     return res.status(404).json({ error: "show not found" });
   }
 
-  res.json(show);
+  res.json({ ...show.toJSON(), fee: 0.0639 });
 });
 
 export default router;
