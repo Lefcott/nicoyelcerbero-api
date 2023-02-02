@@ -21,7 +21,7 @@ export interface ShowInterface {
 }
 
 const showSchema = new Schema<ShowInterface>({
-  key: { type: String, required: true },
+  key: { type: String, required: true, unique: true },
   active: { type: Boolean, required: true },
   flyerUrl: { type: String, required: true },
   bannerUrl: { type: String, required: true },
@@ -74,7 +74,13 @@ Show.watch().on("change", async (data) => {
         await new ShowKey({
           showId,
           showKey,
-        }).save();
+        })
+          .save()
+          .catch(() => {
+            console.log(
+              "ShowKey was not inserted (might've been created by another server instance)"
+            );
+          });
 
         showKey = data.fullDocument.key;
         break;
@@ -108,7 +114,13 @@ Show.watch().on("change", async (data) => {
             await new ShowKey({
               showId,
               showKey: updatedKey,
-            }).save();
+            })
+              .save()
+              .catch(() => {
+                console.log(
+                  "ShowKey was not inserted (might've been created by another server instance)"
+                );
+              });
           }
           // Set key to revalidate path
           showKey = updatedKey;

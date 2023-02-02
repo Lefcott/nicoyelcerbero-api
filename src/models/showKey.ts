@@ -7,7 +7,7 @@ export interface ShowKeyInterface {
 
 const showKeySchema = new Schema<ShowKeyInterface>({
   showId: { type: String, required: true },
-  showKey: { type: String, required: true },
+  showKey: { type: String, required: true, unique: true },
 });
 
 const ShowKey = mongoose.model("ShowKey", showKeySchema, "showKeys");
