@@ -48,12 +48,12 @@ Show.watch().on("change", async (data) => {
   const showId = data.documentKey._id;
   const show = await Show.findById(showId);
 
-  if (!show) {
-    console.error(`changed show with id ${showId} not found`);
-    return;
-  }
+  // TODO case of removing
 
-  const paths = ["/", `/${show.key}`];
+  const paths = ["/"];
+  if (show) {
+    paths.push(`/${show.key}`);
+  }
   console.log("revalidating", paths);
 
   axios
