@@ -105,7 +105,10 @@ if (process.env.REVALIDATION_ENABLED === "true") {
           const updatedKey = updatedFields?.key;
 
           if (updatedFields) {
-            showDetailsPageSocket.emit("showUpdated", updatedFields);
+            showDetailsPageSocket.emit("showUpdated", {
+              ...updatedFields,
+              _id: showId,
+            });
           }
 
           if (updatedKey) {
