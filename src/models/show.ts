@@ -1,5 +1,6 @@
 import axios from "axios";
 import mongoose, { Schema } from "mongoose";
+import showDetailsPageSocket from "../sockets/showDetailsPage";
 import ShowKey from "./showKey";
 import { GuestInterface } from "./ticketPayment";
 
@@ -100,7 +101,12 @@ if (process.env.REVALIDATION_ENABLED === "true") {
           break;
         }
         case "update": {
-          const updatedKey = data.updateDescription.updatedFields?.key;
+          const { updatedFields } = data.updateDescription;
+          const updatedKey = updatedFields?.key;
+
+          if (updatedFields) {
+            showDetailsPageSocket.emit("showUpdated", updatedFields);
+          }
 
           if (updatedKey) {
             // Invalidate the old key if the key was updated
