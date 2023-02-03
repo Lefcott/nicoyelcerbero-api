@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 const requestLoggerMiddleware = (req: Request, res: Response, next) => {
   const date = new Date().toLocaleString();
   const start = Date.now();
+  const { url } = req;
 
   const write = res.write;
   const end = res.end;
@@ -23,7 +24,7 @@ const requestLoggerMiddleware = (req: Request, res: Response, next) => {
     console.log("\x1b[1m\n" + "=".repeat(50) + "\x1b[0m");
     console.log(
       `\x1b[1m[${date}] ${req.method} ${
-        req.url.substring(0, req.url.indexOf("/")) || req.url
+        url.substring(0, url.indexOf("?")) || url
       }\x1b[0m`
     );
     console.log("\x1b[1m" + "-".repeat(50) + "\x1b[0m");
