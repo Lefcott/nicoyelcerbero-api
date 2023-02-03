@@ -60,36 +60,38 @@ if (process.env.REVALIDATION_ENABLED === "true") {
 
       switch (data.operationType) {
         case "insert":
-          // Set key to revalidate path
-          showKey = data.fullDocument.key;
+          {
+            // Set key to revalidate path
+            showKey = data.fullDocument.key;
 
-          if (!showKey) {
-            // Cannot revalidate path or create a show-key association, this won't impact the cache
-            console.error(
-              `inserted document doesnt have key, show id: ${showId}`
-            );
-            return;
-          }
-
-          // Associate show id with key
-          await new ShowKey({
-            showId,
-            showKey,
-          })
-            .save()
-            .catch(() => {
-              console.log(
-                "ShowKey was not inserted (might've been created by another server instance)"
+            if (!showKey) {
+              // Cannot revalidate path or create a show-key association, this won't impact the cache
+              console.error(
+                `inserted document doesnt have key, show id: ${showId}`
               );
-            });
+              return;
+            }
 
-          showKey = data.fullDocument.key;
+            // Associate show id with key
+            await new ShowKey({
+              showId,
+              showKey,
+            })
+              .save()
+              .catch(() => {
+                console.log(
+                  "ShowKey was not inserted (might've been created by another server instance)"
+                );
+              });
+
+            showKey = data.fullDocument.key;
+          }
           break;
         case "delete": {
           const showKeyDoc = await ShowKey.findOneAndDelete({ showId });
           if (showKeyDoc) {
             // Set key to revalidate path
-            showKey = showKeyDoc?.showKey;
+            showKey = showKeyDoc.showKey;
           } else {
             // Cannot revalidate path, the page cachhe will be kept
             console.error(`didnt find deleted show with id ${showId}`);
@@ -147,11 +149,8 @@ if (process.env.REVALIDATION_ENABLED === "true") {
         }
       }
 
-      const show = await Show.findById(showId);
+      pathsToRevalidate.push(`/${showKey}`);
 
-      if (show) {
-        pathsToRevalidate.push(`/${show.key}`);
-      }
       console.log("revalidating", pathsToRevalidate);
 
       axios
