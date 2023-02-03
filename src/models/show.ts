@@ -5,6 +5,7 @@ import ShowKey from "./showKey";
 import { GuestInterface } from "./ticketPayment";
 
 export interface ShowInterface {
+  _id: string;
   key: string;
   active: boolean;
   flyerUrl: string;
