@@ -44,127 +44,129 @@ const showSchema = new Schema<ShowInterface>({
 
 const Show = mongoose.model("Show", showSchema, "shows");
 
-Show.watch().on("change", async (data) => {
-  try {
-    console.log("reval data", data);
+if (process.env.REVALIDATION_ENABLED === "true") {
+  Show.watch().on("change", async (data) => {
+    try {
+      console.log("reval data", data);
 
-    // @ts-ignore
-    const showId = data.documentKey._id;
-    let showKey: string;
+      // @ts-ignore
+      const showId = data.documentKey._id;
+      let showKey: string;
 
-    if (!showId) {
-      return;
-    }
-    const pathsToRevalidate = ["/"];
-
-    switch (data.operationType) {
-      case "insert":
-        // Set key to revalidate path
-        showKey = data.fullDocument.key;
-
-        if (!showKey) {
-          // Cannot revalidate path or create a show-key association, this won't impact the cache
-          console.error(
-            `inserted document doesnt have key, show id: ${showId}`
-          );
-          return;
-        }
-
-        // Associate show id with key
-        await new ShowKey({
-          showId,
-          showKey,
-        })
-          .save()
-          .catch(() => {
-            console.log(
-              "ShowKey was not inserted (might've been created by another server instance)"
-            );
-          });
-
-        showKey = data.fullDocument.key;
-        break;
-      case "delete": {
-        const showKeyDoc = await ShowKey.findOneAndDelete({ showId });
-        if (showKeyDoc) {
-          // Set key to revalidate path
-          showKey = showKeyDoc?.showKey;
-        } else {
-          // Cannot revalidate path, the page cachhe will be kept
-          console.error(`didnt find deleted show with id ${showId}`);
-          return;
-        }
-        break;
+      if (!showId) {
+        return;
       }
-      case "update": {
-        const updatedKey = data.updateDescription.updatedFields?.key;
+      const pathsToRevalidate = ["/"];
 
-        if (updatedKey) {
-          // Invalidate the old key if the key was updated
-          const showKeyDoc = await ShowKey.findOneAndUpdate(
-            { showId },
-            { $set: { showKey: updatedKey } }
-          );
-
-          if (showKeyDoc) {
-            // Invalidate the old key
-            pathsToRevalidate.push(`/${showKeyDoc.showKey}`);
-          } else {
-            // Page with old key won't be revalidated, but an association will be created
-            await new ShowKey({
-              showId,
-              showKey: updatedKey,
-            })
-              .save()
-              .catch(() => {
-                console.log(
-                  "ShowKey was not inserted (might've been created by another server instance)"
-                );
-              });
-          }
+      switch (data.operationType) {
+        case "insert":
           // Set key to revalidate path
-          showKey = updatedKey;
-        } else {
-          // Lookup show key to revalidate
-          const show = await Show.findById(showId);
+          showKey = data.fullDocument.key;
 
-          // Cannot revalidate path, the show key is not available, the page cachhe will be kept
-          if (!show) {
-            console.error(`didnt find deleted show with ${showId}`);
+          if (!showKey) {
+            // Cannot revalidate path or create a show-key association, this won't impact the cache
+            console.error(
+              `inserted document doesnt have key, show id: ${showId}`
+            );
             return;
           }
 
-          // Set key to revalidate path
-          showKey = show.key;
+          // Associate show id with key
+          await new ShowKey({
+            showId,
+            showKey,
+          })
+            .save()
+            .catch(() => {
+              console.log(
+                "ShowKey was not inserted (might've been created by another server instance)"
+              );
+            });
+
+          showKey = data.fullDocument.key;
+          break;
+        case "delete": {
+          const showKeyDoc = await ShowKey.findOneAndDelete({ showId });
+          if (showKeyDoc) {
+            // Set key to revalidate path
+            showKey = showKeyDoc?.showKey;
+          } else {
+            // Cannot revalidate path, the page cachhe will be kept
+            console.error(`didnt find deleted show with id ${showId}`);
+            return;
+          }
+          break;
         }
+        case "update": {
+          const updatedKey = data.updateDescription.updatedFields?.key;
 
-        break;
+          if (updatedKey) {
+            // Invalidate the old key if the key was updated
+            const showKeyDoc = await ShowKey.findOneAndUpdate(
+              { showId },
+              { $set: { showKey: updatedKey } }
+            );
+
+            if (showKeyDoc) {
+              // Invalidate the old key
+              pathsToRevalidate.push(`/${showKeyDoc.showKey}`);
+            } else {
+              // Page with old key won't be revalidated, but an association will be created
+              await new ShowKey({
+                showId,
+                showKey: updatedKey,
+              })
+                .save()
+                .catch(() => {
+                  console.log(
+                    "ShowKey was not inserted (might've been created by another server instance)"
+                  );
+                });
+            }
+            // Set key to revalidate path
+            showKey = updatedKey;
+          } else {
+            // Lookup show key to revalidate
+            const show = await Show.findById(showId);
+
+            // Cannot revalidate path, the show key is not available, the page cachhe will be kept
+            if (!show) {
+              console.error(`didnt find deleted show with ${showId}`);
+              return;
+            }
+
+            // Set key to revalidate path
+            showKey = show.key;
+          }
+
+          break;
+        }
+        default: {
+          // Operation not supported
+          return;
+        }
       }
-      default: {
-        // Operation not supported
-        return;
+
+      const show = await Show.findById(showId);
+
+      if (show) {
+        pathsToRevalidate.push(`/${show.key}`);
       }
+      console.log("revalidating", pathsToRevalidate);
+
+      axios
+        .post(
+          `${process.env.WEB_URL}/api/revalidate`,
+          { paths: pathsToRevalidate },
+          { params: { token: process.env.REVALIDATION_TOKEN } }
+        )
+        .then(() => {
+          console.log("cache was revalidated");
+        });
+    } catch (error) {
+      console.error(error);
     }
-
-    const show = await Show.findById(showId);
-
-    if (show) {
-      pathsToRevalidate.push(`/${show.key}`);
-    }
-    console.log("revalidating", pathsToRevalidate);
-
-    axios
-      .post(
-        `${process.env.WEB_URL}/api/revalidate`,
-        { paths: pathsToRevalidate },
-        { params: { token: process.env.REVALIDATION_TOKEN } }
-      )
-      .then(() => {
-        console.log("cache was revalidated");
-      });
-  } catch (error) {
-    console.error(error);
-  }
-});
+  });
+}
 
 export default Show;
