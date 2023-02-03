@@ -3,6 +3,7 @@ import TicketPayment from "../../models/ticketPayment";
 import { addGuestsToShow } from "../../utils/addGuestsToShow";
 
 import mercadopago from "../../utils/mercadopago";
+import { notifyTicketNotPaid } from "../../utils/notifyTicketNotPaid";
 
 const router = express.Router();
 
@@ -30,6 +31,11 @@ router.post("/", async (req, res, next) => {
 
     if (status === "approved") {
       await addGuestsToShow(ticketPayment);
+    } else if (
+      payment.body.status === "cancelled" ||
+      payment.body.status === "rejected"
+    ) {
+      await notifyTicketNotPaid(ticketPayment, payment);
     }
   } catch (error) {
     next(error);

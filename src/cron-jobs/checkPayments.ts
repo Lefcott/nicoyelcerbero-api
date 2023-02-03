@@ -4,6 +4,9 @@ import { wait } from "../utils/wait";
 import mercadopago from "../utils/mercadopago";
 import { addGuestsToShow } from "../utils/addGuestsToShow";
 import { PaymentGetResponse } from "mercadopago/resources/payment";
+import { sendEmail } from "../utils/sendEmail";
+import Show from "../models/show";
+import { notifyTicketNotPaid } from "../utils/notifyTicketNotPaid";
 
 export const run = async () => {
   const ticketPayments = await TicketPayment.find({
@@ -28,9 +31,16 @@ export const run = async () => {
       ticketPayment.status = payment.body.status;
       await ticketPayment.save();
     }
+
     if (payment.body.status === "approved") {
       await addGuestsToShow(ticketPayment);
+    } else if (
+      payment.body.status === "cancelled" ||
+      payment.body.status === "rejected"
+    ) {
+      await notifyTicketNotPaid(ticketPayment, payment);
     }
+
     await wait(500);
   }
 };
