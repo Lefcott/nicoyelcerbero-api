@@ -1,12 +1,14 @@
 import ticketPaymentRoutes from "./ticketPayments";
 import payentEvents from "./paymentEvents";
 import showRoutes from "./shows";
+import verificationCodesRoutes from "./verificationCodes";
 import cronJobRoutes from "./cron-jobs";
 import app from "./middlewares";
 
 app.use(ticketPaymentRoutes);
 app.use(payentEvents);
 app.use(showRoutes);
+app.use(verificationCodesRoutes);
 app.use(cronJobRoutes);
 
 app.use((error, req, res, next) => {
@@ -14,5 +16,3 @@ app.use((error, req, res, next) => {
   res.status(500).json({ error, errorMessage: error.message });
   res.end();
 });
-
-// app.listen(process.env.PORT || 3001);
