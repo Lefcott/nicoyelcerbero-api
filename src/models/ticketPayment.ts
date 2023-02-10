@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { v4 as uuid } from "uuid";
 
 export interface GuestInterface {
   firstName: string;
@@ -8,6 +9,7 @@ export interface GuestInterface {
 export interface TicketPaymentInterface {
   paymentInternalId: string;
   paymentExternalId: string;
+  refundToken: string;
   showKey: string;
   payerEmail: string;
   guests: GuestInterface[];
@@ -17,6 +19,10 @@ export interface TicketPaymentInterface {
 const ticketPaymentSchema = new Schema<TicketPaymentInterface>({
   paymentInternalId: { type: String, required: true },
   paymentExternalId: String,
+  refundToken: {
+    type: String,
+    default: () => `${uuid()}${uuid()}`.replace(/-/g, "").toUpperCase(),
+  },
   showKey: { type: String, required: true },
   payerEmail: { type: String, required: true },
   status: { type: String, required: true },

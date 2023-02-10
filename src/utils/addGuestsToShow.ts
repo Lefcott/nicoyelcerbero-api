@@ -20,7 +20,9 @@ export const addGuestsToShow = async (
   await sendEmail("ticketConfirmation", ticketPayment.payerEmail, {
     guests: ticketPayment.guests,
     show,
-    refundUrl: `${process.env.WEB_URL}/reembolsos/${ticketPayment._id}`,
+    refundUrl: `${process.env.WEB_URL}/reembolsos/${
+      ticketPayment._id
+    }?token=${encodeURIComponent(ticketPayment.refundToken)}`,
   });
 
   await sendEmail("ticketPurchased", notificationEmails, {
