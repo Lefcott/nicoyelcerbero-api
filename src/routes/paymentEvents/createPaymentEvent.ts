@@ -13,13 +13,14 @@ router.post("/", async (req, res, next) => {
     const { id: paymentExternalId } = req.body.data;
     const payment = await mercadopago.payment.get(req.body.data.id);
     const [{ id: paymentInternalId }] = payment.body.additional_info.items;
+    const { transaction_amount: paidAmount } = payment.body;
     const { status } = payment.body;
 
     res.json({ message: "OK" });
 
     const ticketPayment = await TicketPayment.findOneAndUpdate(
       { paymentInternalId },
-      { paymentExternalId, status }
+      { paymentExternalId, status, paidAmount }
     );
 
     if (!ticketPayment) {
