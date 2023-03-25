@@ -31,7 +31,9 @@ router.post("/", async (req, res, next) => {
     }
 
     if (status === "approved") {
-      await addGuestsToShow(ticketPayment);
+      if (ticketPayment.status !== "approved") {
+        await addGuestsToShow(ticketPayment);
+      }
     } else if (
       payment.body.status === "cancelled" ||
       payment.body.status === "rejected"
