@@ -65,7 +65,7 @@ export const cancelTickets = async (
     ),
   ]);
 
-  await sendEmail("refundSuccessful", ticketPayment.payerEmail, {
+  sendEmail("refundSuccessful", ticketPayment.payerEmail, {
     guests: guestsToRefund,
   });
 };
