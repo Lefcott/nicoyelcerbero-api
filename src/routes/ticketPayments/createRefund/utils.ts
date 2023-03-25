@@ -44,7 +44,7 @@ export const cancelTickets = async (
   amountToRefund = Math.floor(amountToRefund * 100) / 100;
 
   const guestsToRefund = guestIds.map((guestId) =>
-    ticketPayment.guests.find((guest) => guest._id === guestId)
+    ticketPayment.guests.find((guest) => guest._id.toString() === guestId)
   );
 
   await mercadopago.refund.create({
