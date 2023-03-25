@@ -4,6 +4,7 @@ import Show from "../../../models/show";
 import TicketPayment, {
   TicketPaymentInterface,
 } from "../../../models/ticketPayment";
+import { sendEmail } from "../../../utils/sendEmail";
 
 const validateGuestRefund = (
   ticketPayment: TicketPaymentInterface,
@@ -42,6 +43,10 @@ export const cancelTickets = async (
     ticketPayment.guests.length;
   amountToRefund = Math.floor(amountToRefund * 100) / 100;
 
+  const guestsToRefund = guestIds.map((guestId) =>
+    ticketPayment.guests.find((guest) => guest._id === guestId)
+  );
+
   await mercadopago.refund.create({
     payment_id: ticketPayment.paymentExternalId,
     amount: amountToRefund,
@@ -59,4 +64,8 @@ export const cancelTickets = async (
       { arrayFilters: [{ "elem._id": { $in: guestIds } }], multi: true }
     ),
   ]);
+
+  await sendEmail("refundSuccessful", ticketPayment.payerEmail, {
+    guests: guestsToRefund,
+  });
 };
