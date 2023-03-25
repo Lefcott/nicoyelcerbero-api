@@ -39,6 +39,7 @@ const showSchema = new Schema<ShowInterface>({
     {
       firstName: { type: String, required: true },
       lastName: { type: String, required: true },
+      cancelled: { type: Boolean, default: false },
     },
   ],
   feePayer: { type: String, required: true },
@@ -106,6 +107,7 @@ if (process.env.REVALIDATION_ENABLED === "true") {
           const updatedKey = updatedFields?.key;
 
           if (updatedFields) {
+            console.log("updatedFields", updatedFields);
             showDetailsPageSocket.emit("showUpdated", {
               ...updatedFields,
               _id: showId,

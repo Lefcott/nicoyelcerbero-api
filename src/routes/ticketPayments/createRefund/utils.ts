@@ -1,4 +1,6 @@
+import mercadopago from "mercadopago";
 import { Document, Types } from "mongoose";
+import Show from "../../../models/show";
 import TicketPayment, {
   TicketPaymentInterface,
 } from "../../../models/ticketPayment";
@@ -35,9 +37,26 @@ export const cancelTickets = async (
     },
   guestIds: string[]
 ) => {
-  await TicketPayment.updateOne(
-    { _id: ticketPayment._id, "guests._id": { $in: guestIds } },
-    { $set: { "guests.$[elem].cancelled": true } },
-    { arrayFilters: [{ "elem._id": { $in: guestIds } }], multi: true }
-  );
+  let amountToRefund =
+    ((ticketPayment.paidAmount || 0) * guestIds.length) /
+    ticketPayment.guests.length;
+  amountToRefund = Math.floor(amountToRefund * 100) / 100;
+
+  await mercadopago.refund.create({
+    payment_id: ticketPayment.paymentExternalId,
+    amount: amountToRefund,
+  });
+
+  await Promise.all([
+    TicketPayment.updateOne(
+      { _id: ticketPayment._id, "guests._id": { $in: guestIds } },
+      { $set: { "guests.$[elem].cancelled": true } },
+      { arrayFilters: [{ "elem._id": { $in: guestIds } }], multi: true }
+    ),
+    Show.updateOne(
+      { key: ticketPayment.showKey, "guests._id": { $in: guestIds } },
+      { $set: { "guests.$[elem].cancelled": true } },
+      { arrayFilters: [{ "elem._id": { $in: guestIds } }], multi: true }
+    ),
+  ]);
 };

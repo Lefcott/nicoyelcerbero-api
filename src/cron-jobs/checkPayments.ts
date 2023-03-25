@@ -4,8 +4,6 @@ import { wait } from "../utils/wait";
 import mercadopago from "../utils/mercadopago";
 import { addGuestsToShow } from "../utils/addGuestsToShow";
 import { PaymentGetResponse } from "mercadopago/resources/payment";
-import { sendEmail } from "../utils/sendEmail";
-import Show from "../models/show";
 import { notifyTicketNotPaid } from "../utils/notifyTicketNotPaid";
 
 export const run = async () => {
