@@ -71,11 +71,11 @@
       <li>{{ firstName }} {{ lastName }}</li>
       {{ /guests }}
     </ul>
-    <p>Esta es la lista completa de invitados hasta el momento (<b>{{ show.guests.length }} personas</b>):</p>
+    <p>Esta es la lista completa de invitados hasta el momento (<b>{{ totalGuests.length }} personas</b>):</p>
     <ul>
-      {{ #show.guests }}
+      {{ #totalGuests }}
       <li>{{ firstName }} {{ lastName }}</li>
-      {{ /show.guests }}
+      {{ /totalGuests }}
     </ul>
   </main>
 </body>

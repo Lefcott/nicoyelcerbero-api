@@ -16,6 +16,7 @@ export const addGuestsToShow = async (
     { $push: { guests: { $each: ticketPayment.guests } } }
   );
   const show = await Show.findOne({ key: ticketPayment.showKey });
+  const totalGuests = show?.guests.filter((guest) => !guest.cancelled);
 
   await sendEmail("ticketConfirmation", ticketPayment.payerEmail, {
     guests: ticketPayment.guests,
@@ -32,5 +33,6 @@ export const addGuestsToShow = async (
       .map((guest) => `${guest.firstName} ${guest.lastName}`)
       .join(", "),
     show,
+    totalGuests,
   });
 };
