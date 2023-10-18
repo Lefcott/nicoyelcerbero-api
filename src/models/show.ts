@@ -17,6 +17,7 @@ export interface ShowInterface {
   locationName: string;
   address: string;
   addressUrl: string;
+  locationPhotos: string[];
   onlyAdults: boolean;
   guests: GuestInterface[];
   feePayer: "buyer" | "seller" | "both";
@@ -35,6 +36,7 @@ const showSchema = new Schema<ShowInterface>({
   address: { type: String, required: true },
   addressUrl: { type: String, required: true },
   onlyAdults: { type: Boolean, required: true },
+  locationPhotos: [String],
   guests: [
     {
       firstName: { type: String, required: true },
