@@ -53,30 +53,12 @@
 <body>
   <header>
     <img src="https://acidamente.vercel.app/logo.png" alt="Ácidamente Logo" width="75" height="75">
-    {{ #guests.1 }}
-    <h1>Se agregaron {{ guests.length }} invitados más</h1>
-    {{ /guests.1 }}
-    {{ ^guests.1 }}
-    <h1>Se agregó un invitado más</h1>
-    {{ /guests.1 }}
+    <h1>Alguien opinó sobre la página de Ácidamente.</h1>
   </header>
   <main>
     <p>
-      {{ payerEmail }} compró {{ guests.length }} entrada{{ #guests.1 }}s{{ /guests.1 }} para el show del {{ show.date
-      }}.
+      {{ text }}
     </p>
-    <p>Los nuevos invitados son:</p>
-    <ul>
-      {{ #guests }}
-      <li>{{ firstName }} {{ lastName }}</li>
-      {{ /guests }}
-    </ul>
-    <p>Esta es la lista completa de invitados hasta el momento (<b>{{ totalGuests.length }} personas</b>):</p>
-    <ul>
-      {{ #totalGuests }}
-      <li>{{ firstName }} {{ lastName }}</li>
-      {{ /totalGuests }}
-    </ul>
   </main>
 </body>
 
