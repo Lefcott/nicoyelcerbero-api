@@ -8,7 +8,7 @@ export interface UserActivityInterface {
 
 const userActivitySchema = new Schema<UserActivityInterface>({
   pageVisitId: { type: String, required: true },
-  timeElapsed: { type: Number, default: 0 },
+  timeElapsed: { type: Number, default: -1 },
   createdAt: { type: Date, default: () => new Date() },
 });
 
