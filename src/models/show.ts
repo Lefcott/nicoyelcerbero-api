@@ -21,6 +21,7 @@ export interface ShowInterface {
   previousShows: { videoUrl: string; title: string; linkTwUrl?: string }[];
   onlyAdults: boolean;
   guests: GuestInterface[];
+  chatEnabled: boolean;
   feePayer: "buyer" | "seller" | "both";
 }
 
@@ -31,6 +32,7 @@ const showSchema = new Schema<ShowInterface>({
   bannerUrl: { type: String, required: true },
   date: { type: String, required: true },
   isFree: { type: Boolean, required: true },
+  chatEnabled: { type: Boolean, default: false },
   presalePrice: Number,
   indoorPrice: Number,
   locationName: { type: String, required: true },
