@@ -3,6 +3,7 @@ import { body, validationResult } from "express-validator";
 import { isValidObjectId } from "mongoose";
 import { sendEmail } from "../../utils/sendEmail";
 import Conversation from "../../models/conversation";
+import conversationSocket from "../../sockets/conversation";
 
 const router = express.Router();
 const notificationEmails = (process.env.NOTIFICATION_EMAILS || "").split(",");
@@ -38,6 +39,7 @@ router.post(
         }).save();
         conversationId = conversation._id;
       } else {
+        conversationSocket.emit("newMessage", { from, text });
         await Conversation.findByIdAndUpdate(conversationId, {
           $push: { messages: { text, from } },
         });
