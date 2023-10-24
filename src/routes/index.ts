@@ -4,6 +4,7 @@ import showRoutes from "./shows";
 import verificationCodesRoutes from "./verificationCodes";
 import cronJobRoutes from "./cron-jobs";
 import opinionRoutes from "./opinions";
+import messageRoutes from "./messages";
 import eventsRoutes from "./events";
 import app from "./middlewares";
 
@@ -13,6 +14,7 @@ app.use(showRoutes);
 app.use(verificationCodesRoutes);
 app.use(cronJobRoutes);
 app.use(opinionRoutes);
+app.use(messageRoutes);
 app.use(eventsRoutes);
 
 app.use((error, req, res, next) => {
