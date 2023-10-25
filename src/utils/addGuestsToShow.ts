@@ -19,7 +19,9 @@ export const addGuestsToShow = async (
   const totalGuests = show?.guests.filter((guest) => !guest.cancelled);
 
   await sendEmail("ticketConfirmation", ticketPayment.payerEmail, {
-    guests: ticketPayment.guests,
+    guests: ticketPayment.guests
+      .map((guest) => `${guest.firstName} ${guest.lastName}`)
+      .sort(),
     show,
     refundUrl: `${process.env.WEB_URL}/reembolsos/${
       ticketPayment._id
