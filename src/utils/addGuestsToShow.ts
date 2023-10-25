@@ -27,14 +27,14 @@ export const addGuestsToShow = async (
   });
 
   await sendEmail("ticketPurchased", notificationEmails, {
-    guests: ticketPayment.guests
-      .map((guest) => `${guest.firstName} ${guest.lastName}`)
-      .sort(),
+    guests: ticketPayment.guests,
     payerEmail: ticketPayment.payerEmail,
     guestNames: ticketPayment.guests
       .map((guest) => `${guest.firstName} ${guest.lastName}`)
       .join(", "),
     show,
-    totalGuests,
+    totalGuests: (totalGuests || [])
+      .map((guest) => `${guest.firstName} ${guest.lastName}`)
+      .sort(),
   });
 };
