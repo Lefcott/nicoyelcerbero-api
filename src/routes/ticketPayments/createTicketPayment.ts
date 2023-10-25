@@ -39,11 +39,11 @@ router.post(
 
       console.log(
         "setting success back url",
-        `${process.env.WEB_URL}/success?payerEmail=${encodeURIComponent(
+        `${process.env.WEB_URL}/success/${encodeURIComponent(
           payerEmail
-        )}&guests=${encodeURIComponent(
+        )}/${encodeURIComponent(show.date)}/${encodeURIComponent(
           JSON.stringify(guests)
-        )}&showDate=${encodeURIComponent(show.date)}`
+        )}`
       );
       const preference = await mercadopago.preferences.create({
         items: [
