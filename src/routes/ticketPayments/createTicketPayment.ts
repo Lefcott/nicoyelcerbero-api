@@ -53,6 +53,15 @@ router.post(
             unit_price: price,
           },
         ],
+        back_urls: {
+          success: `${
+            process.env.WEB_URL
+          }/sucess?payerEmail=${encodeURIComponent(
+            payerEmail
+          )}&guests=${encodeURIComponent(
+            JSON.stringify(guests)
+          )}&showDate=${encodeURIComponent(show.date)}`,
+        },
       });
 
       const ticketPayment = new TicketPayment({
