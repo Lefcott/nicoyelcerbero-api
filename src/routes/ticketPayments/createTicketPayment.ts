@@ -62,30 +62,12 @@ router.post(
           },
         ],
         back_urls: {
-          success: `${process.env.WEB_URL}/success`,
-          // success: `${
-          //   process.env.WEB_URL
-          // }/success?payerEmail=${encodeURIComponent(
-          //   payerEmail
-          // )}&guests=${encodeURIComponent(
-          //   JSON.stringify(guests)
-          // )}&showDate=${encodeURIComponent(show.date)}`,
-          // failure: `${
-          //   process.env.WEB_URL
-          // }/failure?payerEmail=${encodeURIComponent(
-          //   payerEmail
-          // )}&guests=${encodeURIComponent(
-          //   JSON.stringify(guests)
-          // )}&showDate=${encodeURIComponent(show.date)}`,
-          // pending: `${
-          //   process.env.WEB_URL
-          // }/pending?payerEmail=${encodeURIComponent(
-          //   payerEmail
-          // )}&guests=${encodeURIComponent(
-          //   JSON.stringify(guests)
-          // )}&showDate=${encodeURIComponent(show.date)}`,
+          success: `${process.env.WEB_URL}/success/${encodeURIComponent(
+            payerEmail
+          )}/${encodeURIComponent(show.date)}/${encodeURIComponent(
+            JSON.stringify(guests)
+          )}`,
         },
-        auto_return: "approved",
       });
 
       const ticketPayment = new TicketPayment({
