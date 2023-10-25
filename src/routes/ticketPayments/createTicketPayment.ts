@@ -37,14 +37,6 @@ router.post(
       const paymentInternalId = uuid();
       let price = getPrice(show, guests);
 
-      console.log(
-        "setting success back url",
-        `${process.env.WEB_URL}/success/${encodeURIComponent(
-          payerEmail
-        )}/${encodeURIComponent(show.date)}/${encodeURIComponent(
-          JSON.stringify(guests)
-        )}`
-      );
       const preference = await mercadopago.preferences.create({
         items: [
           {
@@ -64,9 +56,7 @@ router.post(
         back_urls: {
           success: `${process.env.WEB_URL}/success/${encodeURIComponent(
             payerEmail
-          )}/${encodeURIComponent(show.date)}/${encodeURIComponent(
-            JSON.stringify(guests)
-          )}`,
+          )}/${guests.length}`,
         },
       });
 
