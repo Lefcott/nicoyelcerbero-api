@@ -31,6 +31,12 @@ export const getAlreadyRefundedGuestNames = (
     });
 };
 
+export const isCancellationInTime = (show: any) => {
+  return (
+    (+show.showDate - +new Date()) / 1000 / 60 / 60 >= show.cancellationHours
+  );
+};
+
 export const cancelTickets = async (
   ticketPayment: Document<unknown, any, TicketPaymentInterface> &
     TicketPaymentInterface & {

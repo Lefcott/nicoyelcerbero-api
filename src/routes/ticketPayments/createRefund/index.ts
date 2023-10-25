@@ -2,7 +2,12 @@ import express from "express";
 import { check, body, validationResult } from "express-validator";
 import { isValidObjectId } from "mongoose";
 import TicketPayment from "../../../models/ticketPayment";
-import { cancelTickets, getAlreadyRefundedGuestNames } from "./utils";
+import {
+  cancelTickets,
+  getAlreadyRefundedGuestNames,
+  isCancellationInTime,
+} from "./utils";
+import Show from "../../../models/show";
 
 const router = express.Router();
 
@@ -46,6 +51,22 @@ router.post(
           error: "ticket/s already refunded",
           code: "ticketsAlreadyRefunded",
           refundedGuests,
+        });
+      }
+
+      const show = await Show.findOne({ key: ticketPayment.showKey });
+
+      if (!show) {
+        return res.status(404).json({
+          error: "cancellation time passed",
+          code: "cancellationTimePassed",
+        });
+      }
+
+      if (!isCancellationInTime(show)) {
+        return res.status(400).json({
+          error: "show not found",
+          code: "showNotFound",
         });
       }
 

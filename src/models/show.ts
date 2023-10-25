@@ -23,6 +23,8 @@ export interface ShowInterface {
   guests: GuestInterface[];
   chatEnabled: boolean;
   feePayer: "buyer" | "seller" | "both";
+  showDate: Date;
+  cancellationHours: number;
 }
 
 const showSchema = new Schema<ShowInterface>({
@@ -55,6 +57,8 @@ const showSchema = new Schema<ShowInterface>({
     },
   ],
   feePayer: { type: String, required: true },
+  showDate: Date,
+  cancellationHours: { type: Number, default: 8 },
 });
 
 const Show = mongoose.model("Show", showSchema, "shows");
