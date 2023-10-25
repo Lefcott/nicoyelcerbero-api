@@ -1,8 +1,10 @@
 import express from "express";
 import { body, validationResult } from "express-validator";
 import Event from "../../models/event";
+import { sendEmail } from "../../utils/sendEmail";
 
 const router = express.Router();
+const notificationEmails = (process.env.NOTIFICATION_EMAILS || "").split(",");
 
 router.post(
   "/",
@@ -17,6 +19,13 @@ router.post(
 
     try {
       const { name, pageVisitId, description } = req.body;
+
+      if (name === "PageOpenedFromAd") {
+        await sendEmail("pageOpenedFromAd", notificationEmails, {
+          pageVisitId,
+          chatToken: process.env.CHAT_TOKEN,
+        });
+      }
 
       await new Event({ name, pageVisitId, description }).save();
 
