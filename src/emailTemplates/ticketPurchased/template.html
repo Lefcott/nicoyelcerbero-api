@@ -74,7 +74,7 @@
     <p>Esta es la lista completa de invitados hasta el momento (<b>{{ totalGuests.length }} personas</b>):</p>
     <ul>
       {{ #totalGuests }}
-      <li>{{ firstName }} {{ lastName }}</li>
+      <li>{{.}}</li>
       {{ /totalGuests }}
     </ul>
   </main>
