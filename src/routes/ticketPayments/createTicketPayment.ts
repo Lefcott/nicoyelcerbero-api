@@ -84,6 +84,7 @@ router.post(
             JSON.stringify(guests)
           )}&showDate=${encodeURIComponent(show.date)}`,
         },
+        auto_return: "approved",
       });
 
       const ticketPayment = new TicketPayment({
