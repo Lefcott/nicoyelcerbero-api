@@ -58,6 +58,7 @@ router.post(
             payerEmail
           )}/${guests.length}`,
         },
+        auto_return: "approved",
       });
 
       const ticketPayment = new TicketPayment({
