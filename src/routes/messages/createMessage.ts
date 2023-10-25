@@ -41,7 +41,7 @@ router.post(
         }).save();
         conversationId = conversation._id;
       } else {
-        conversationSocket.emit("newMessage", { from, text });
+        conversationSocket.emit("newMessage", { from, text }, conversationId);
         await Conversation.findByIdAndUpdate(conversationId, {
           $push: { messages: { text, from } },
         });
