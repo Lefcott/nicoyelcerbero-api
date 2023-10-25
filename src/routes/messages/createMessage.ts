@@ -10,6 +10,7 @@ const notificationEmails = (process.env.NOTIFICATION_EMAILS || "").split(",");
 
 router.post(
   "/",
+  body("pageVisitId").isString(),
   body("from").isString().isIn(["user", "admin"]),
   body("chatToken").isString().optional(),
   body("text").isString(),
@@ -24,7 +25,7 @@ router.post(
     }
 
     try {
-      const { from, chatToken, text } = req.body;
+      const { pageVisitId, from, chatToken, text } = req.body;
       let { conversationId } = req.body;
 
       if (from === "admin" && chatToken !== process.env.CHAT_TOKEN) {
@@ -35,6 +36,7 @@ router.post(
 
       if (!conversationId) {
         const conversation = await new Conversation({
+          pageVisitId,
           messages: [{ text, from }],
         }).save();
         conversationId = conversation._id;

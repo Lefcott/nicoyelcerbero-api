@@ -6,11 +6,13 @@ interface MessageInterface {
 }
 
 export interface ConversationInterface {
+  pageVisitId: string;
   messages: MessageInterface[];
   createdAt: Date;
 }
 
 const conversationSchema = new Schema<ConversationInterface>({
+  pageVisitId: String,
   messages: [
     {
       text: String,
