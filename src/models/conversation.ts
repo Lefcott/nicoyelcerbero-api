@@ -3,6 +3,7 @@ import mongoose, { Schema } from "mongoose";
 interface MessageInterface {
   text: string;
   from: "user" | "admin";
+  time: string;
 }
 
 export interface ConversationInterface {
@@ -17,7 +18,7 @@ const conversationSchema = new Schema<ConversationInterface>({
     {
       text: String,
       from: String,
-      createdAt: { type: Date, default: () => new Date() },
+      time: String,
     },
   ],
   createdAt: { type: Date, default: () => new Date() },

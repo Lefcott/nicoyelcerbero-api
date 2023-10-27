@@ -27,6 +27,7 @@ router.post(
     try {
       const { pageVisitId, from, chatToken, text } = req.body;
       let { conversationId } = req.body;
+      const time = new Date().toISOString();
 
       if (from === "admin" && chatToken !== process.env.CHAT_TOKEN) {
         return res.status(401).json({
@@ -37,13 +38,17 @@ router.post(
       if (!conversationId) {
         const conversation = await new Conversation({
           pageVisitId,
-          messages: [{ text, from }],
+          messages: [{ text, from, time }],
         }).save();
         conversationId = conversation._id;
       } else {
-        conversationSocket.emit("newMessage", { from, text }, conversationId);
+        conversationSocket.emit(
+          "newMessage",
+          { from, text, time },
+          conversationId
+        );
         await Conversation.findByIdAndUpdate(conversationId, {
-          $push: { messages: { text, from } },
+          $push: { messages: { text, from, time } },
         });
       }
 
